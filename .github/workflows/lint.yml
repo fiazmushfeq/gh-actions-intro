@@ -1,18 +1,26 @@
 name: Lint Python Code
-
 on: [push, pull_request]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      statuses: write
+      pull-requests: write   # helpful for annotations on PRs
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run Super Linter
-        uses: github/super-linter@v6
+      - uses: actions/checkout@v4
+      - uses: github/super-linter@v6
         env:
-          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_PYTHON: true
+          DEFAULT_BRANCH: main
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_PYTHON: true
+          # Disable linters you don't want (see next section)
+          VALIDATE_CHECKOV: false
+          VALIDATE_GITLEAKS: false
+          VALIDATE_JSCPD: false
+          VALIDATE_MARKDOWN: false
+          VALIDATE_NATURAL_LANGUAGE: false
+          VALIDATE_YAML: false
